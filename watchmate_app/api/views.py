@@ -1,24 +1,21 @@
-from watchmate_app.models import Movie
-from watchmate_app.api.serializers import MovieSerializers
+from watchmate_app.models import WatchList, StreamPlatform
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
-from rest_framework import response
 from rest_framework.views import APIView
-from .serializers import MovieSerializers
+from .serializers import StreamPlatformSerializers, WatchListSerializers
 from rest_framework import status
 
 
-class MovieListAV(APIView):
+
+class WatchListAV(APIView):
 
     def get(self, request):
-        movies = Movie.objects.all()
-        serialization = MovieSerializers(movies, many=True)
+        watch_list = WatchList.objects.all()
+        serialization = WatchListSerializers(watch_list, many=True)
         return Response(serialization.data)
 
     def post(self, request):
 
-        serializer = MovieSerializers(data=request.data)
+        serializer = WatchListSerializers(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -26,34 +23,34 @@ class MovieListAV(APIView):
         return Response(serializer.errors)
 
 
-class MovieDetailsAV(APIView):
+class WatchDetailsAV(APIView):
 
     def get(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
-        serializer = MovieSerializers(movie)
+        watch_list = WatchList.objects.get(pk=pk)
+        serializer = WatchListSerializers(watch_list)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
-        serializer = MovieSerializers(movie, data=request.data)
+        watch_list = WatchList.objects.get(pk=pk)
+        serializer = WatchListSerializers(watch_list, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
 
     def delete(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
-        movie.delete()
+        watch_list = WatchList.objects.get(pk=pk)
+        watch_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # @api_view()
 # def movie_list(request):
-#     movies = Movie.objects.all()
-#     serializer = MovieSerializers(movies, many=True)
+#     movies = WatchList.objects.all()
+#     serializer = WatchListSerializers(movies, many=True)
 #     return Response(serializer.data)
 # @api_view()
 # def movie_by_id(resqust, pk):
-#     movie = Movie.objects.get(pk = pk)
-#     serializer = MovieSerializers(movie)
+#     watch_list = WatchList.objects.get(pk = pk)
+#     serializer = WatchListSerializers(watch_list)
 #     return Response(serializer.data)

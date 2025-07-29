@@ -1,16 +1,18 @@
 from rest_framework import serializers
-from watchmate_app.models import Movie
+from watchmate_app.models import WatchList, StreamPlatform
 
 
-class MovieSerializers(serializers.ModelSerializer):
+class WatchListSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = Movie
+        model = WatchList
         fields = "__all__"
 
-    def validate_name(self, value):
-        if len(value) < 2:
-            raise serializers.ValidationError("Name is too small")
+
+class StreamPlatformSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
 
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField()
