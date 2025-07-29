@@ -3,7 +3,48 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import StreamPlatformSerializers, WatchListSerializers
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
+
+class StrimingPlatfromListAV(APIView):
+
+    def get(self, request):
+        platfroms = StreamPlatform.objects.all()
+        serialization = StreamPlatformSerializers(platfroms, many=True)
+        return Response(serialization.data)
+
+    @swagger_auto_schema(request_body=StreamPlatformSerializers)
+    def post(self, request):
+
+        serializer = StreamPlatformSerializers(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+class StreamingPlatformDetailsAV(APIView):
+
+    def get(self, request, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        serializer = StreamPlatformSerializers(platform)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=StreamPlatformSerializers)
+    def put(self, request, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        serializer = StreamPlatformSerializers(platform, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    def delete(self, request, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        platform.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class WatchListAV(APIView):
@@ -13,6 +54,7 @@ class WatchListAV(APIView):
         serialization = WatchListSerializers(watch_list, many=True)
         return Response(serialization.data)
 
+    @swagger_auto_schema(request_body=WatchListSerializers)
     def post(self, request):
 
         serializer = WatchListSerializers(data=request.data)
@@ -30,6 +72,7 @@ class WatchDetailsAV(APIView):
         serializer = WatchListSerializers(watch_list)
         return Response(serializer.data)
 
+    @swagger_auto_schema(request_body=WatchListSerializers)
     def put(self, request, pk):
         watch_list = WatchList.objects.get(pk=pk)
         serializer = WatchListSerializers(watch_list, data=request.data)
