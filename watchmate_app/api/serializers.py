@@ -17,6 +17,8 @@ class StreamPlatformSerializers(serializers.ModelSerializer):
         model = StreamPlatform
         fields = "__all__"
 
+
+
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField()
     # description = serializers.CharField()
