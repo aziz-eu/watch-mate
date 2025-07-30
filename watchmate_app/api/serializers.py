@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from watchmate_app.models import WatchList, StreamPlatform
+from watchmate_app.models import WatchList, StreamPlatform, Review
 
 
 class WatchListSerializers(serializers.ModelSerializer):
@@ -18,6 +18,13 @@ class StreamPlatformSerializers(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ReviewSerializers(serializers.ModelSerializer):
+
+    review = WatchListSerializers(many=True, read_only=True)
+
+    class Meta:
+        model = Review
+        fields = "__all__"
 
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField()
